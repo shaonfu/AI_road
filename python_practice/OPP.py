@@ -178,3 +178,5 @@ if __name__ == '__main__':
 
 class Person(object):
     
+    #限定Person对象只能绑定_name,_age和_gender属性
+    __s

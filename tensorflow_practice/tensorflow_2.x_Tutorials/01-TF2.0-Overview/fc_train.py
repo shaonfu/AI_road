@@ -53,4 +53,22 @@ def train_one_step(model,optimizer,x,y):
 
     #loss and acc is scalar tensor
     return loss,accuracy
+
+def train(epoch,model,optimizer):
+    train_ds = mnist_dataset()
+    loss = 0.0
+    accuracy = 0.0
+    for step, (x,y) in enumerate(train_ds):
+        loss, accuracy = train_one_step(model,optimizer, x, y)
+
+        if step % 500 == 0:
+            print('epoch',epoch,':loss',loss.numpy(),';accuracy')
     
+    return loss, accuracy
+
+for epoch in range(20):
+    loss, accuracy = train(epoch,model,optimizer)
+
+print('Final epoch',':loss',loss.numpy(),';accuracy',accuracy.numpy())
+
+
