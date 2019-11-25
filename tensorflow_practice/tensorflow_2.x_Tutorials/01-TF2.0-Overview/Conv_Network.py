@@ -32,7 +32,7 @@ model = tf.keras.Sequential([
     layers.MaxPooling2D((2,2),(2,2),padding='same'),
     layers.Flatten(),
     layers.Dense(32,activation = tf.nn.relu),
-    layers.Dropout(rate = 0.25)
+    layers.Dropout(rate = 0.25),
     layers.Dense(10,activation = tf.nn.softmax)
 ])
 
