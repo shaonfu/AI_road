@@ -1,27 +1,8 @@
-#%%
-from random import randint
-from time import time,sleep
-
-def download_task(filename):
-    print('开始下载%s...' % filename)
-    time_to_download = randint(5,10)
-    sleep(time_to_download)
-    print('%s下载完成耗费了%d秒' % (filename, time_to_download))
-
-
-def process_test():
-    start = time()
-    download_task('Python 从入门到ICU')
-    download_task('Peking Hot.avi')
-    end = time()
-    print('总共耗费了%.2f秒.' % (end - start))
-
-process_test()
-
-# %%
 from multiprocessing import Process
 from os import getpid
-from time import time,sleep
+from random import randint
+from time import time, sleep
+
 
 def download_task(filename):
     print('启动下载进程，进程号[%d].' % getpid())
@@ -30,7 +11,8 @@ def download_task(filename):
     sleep(time_to_download)
     print('%s下载完成! 耗费了%d秒' % (filename, time_to_download))
 
-def process_two():
+
+def main():
     start = time()
     p1 = Process(target=download_task, args=('Python从入门到住院.pdf', ))
     p1.start()
@@ -41,5 +23,6 @@ def process_two():
     end = time()
     print('总共耗费了%.2f秒.' % (end - start))
 
-    
-process_two()
+
+if __name__ == '__main__':
+    main()
