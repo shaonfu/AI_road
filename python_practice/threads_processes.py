@@ -22,6 +22,7 @@ process_test()
 from multiprocessing import Process
 from os import getpid
 from time import time,sleep
+from random import randint
 
 def download_task(filename):
     print('启动下载进程，进程号[%d].' % getpid())
@@ -43,3 +44,6 @@ def process_two():
 
     
 process_two()
+
+
+# %%
