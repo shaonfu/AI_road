@@ -16,6 +16,12 @@ class VGG16(models.Model):
         model = models.Sequential([
             layers.Conv2D(64,(3,3),padding='same',input_shape = input_shape,
             kernel_regularizer=regularizers.l2(weight_decay)),
+            layers.Activation('relu'),
+            layers.BatchNormalization(),
+            layers.Dropout(0.3),
+
+            
+
             
         ])
 
