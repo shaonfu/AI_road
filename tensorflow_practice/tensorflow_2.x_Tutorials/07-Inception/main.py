@@ -107,12 +107,44 @@ class Inception(keras.Model):
 
     def call(self,x,training = None):
         out = self.conv1(x,training = training)
+        out = self.blocks(out,training = training)
 
-
+        out = self.avg_pool(out)
+        out = self.fc(out)
 
         return out
     
 #build model and optimizer
 batch_size = 32
 epochs = 100
+model = Inception(2,10)
+num_classes = 10
+#derive input shape for every layers.
+model.build(input_shape=(None,28,28,1))
+model.summary()
 
+optimizer = keras.optimizers.Adam(learning_rate=1e-3)
+criterion = keras.losses.categorical_crossentropy(from_logits=True)
+
+acc_meter = keras.metrics.Accuracy()
+
+for epoch in range(100):
+
+    for step,(x,y) in enumerate(db_train):
+        with tf.GradientTape() as tape:
+            logits = model(x)
+            loss = criterion(tf.one_hot(y,depth = num_classes),logits)
+        grads = tape.gradient(loss,model.trainable_variables)
+
+        if step % 10 == 0:
+            print(epoch,step,'loss:',loss.numpy())
+
+    acc_meter.reset_states()
+    for x,y in db_test:
+        #[b,10]
+        logits = model(x,training = False)
+        #[b,10]=>[b]
+        pred = tf.argmax(logits,axis = 1)
+        #[b] vs [b,10]
+        acc_meter.update_state(y,pred)
+    print(epoch,'evaluation acc:',acc_meter.result().numpy())
