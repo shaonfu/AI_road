@@ -22,25 +22,67 @@ y_test_ohe = tf.one_hot(y_test,depth=10).numpy()
 print(x_train.shape,y_train.shape, x_test.shape, y_test.shape)
 
 #3x3 convolution
-def conv3x3(channels,strides=1,kernel=(3,3)):
-    return keras.layers.Conv2D(filters)
-
+def conv3x3(channels, stride=1, kernel=(3, 3)):
+    return keras.layers.Conv2D(channels, kernel, strides=stride, padding='same',
+                               use_bias=False,
+                            kernel_initializer=tf.random_normal_initializer())
 
 
 class ResnetBlock(keras.Model):
 
-    def __init__(self,channels, strides = 1, residual = False):
+    def __init__(self,channels, strides = 1, residual_path = False):
         super(ResnetBlock,self).__init__()
+
+        self.channels = channels
+        self.strides = strides
+        self.residual_path = residual_path
+
+        self.conv1 = conv3x3(channels,strides)
+        self.bn1 = keras.layers.BatchNormalization()
+        self.conv2 = conv3x3(channels)
+        self.bn2 = keras.layers.BatchNormalization()
+
+        if residual_path:
+            self.down_conv = conv3x3(channels,strides,kernel=(1, 1))
+            self.down_bn = tf.keras.layers.BatchNormalization()
 
     def call(self,inputs,training = None):
         residual = inputs
+        
+        x = self.bn1(inputs,training=training)
+        x = tf.nn.relu(x)
+        x = self.conv1(x)
+        x = self.bn2(x,training=training)
+        x = tf.nn.relu(x)
+        x = self.conv2(x)
 
+        # this module can be added into self.
+        # however, module in for can not be added.
+        if self.residual_path:
+            residual = self.down_bn(inputs,training=training)
+            residual = tf.nn.relu(residual)
+            residual = self.down_conv(residual)
+        
+        x = x + residual
         return x
 
 class ResNet(keras.Model):
 
-    def __init__(self,block_list,num_classes,initinal_filters=60,**kwargs):
-        super(ResnetBlock,self).__init__(**kwargs)
+    def __init__(self,block_list,num_classes,initinal_filters=16,**kwargs):
+        super(ResNet,self).__init__(**kwargs)
+
+        self.num_blocks = len(block_list)
+        self.block_list = block_list
+
+        self.in_channels = initinal_filters
+        self.out_channels = initinal_filters
+        self.conv_initial = conv3x3(self.out_channels)
+
+        self.blocks = keras.models.Sequential(name='dynamic-blocks')
+
+        #build all the blocks
+        for
+
 
     def call(self,inputs,training = None):
         
@@ -48,6 +90,8 @@ class ResNet(keras.Model):
 
 def main():
     num_classes = 10
+    batch_size = 32
+    epochs = 1
 
 if __name__ == 'main':
     main()

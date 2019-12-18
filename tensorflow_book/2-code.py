@@ -1,4 +1,5 @@
 #%%
+import numpy as np
 #采样数据
 data = []   #保存样本集的列表
 for i in range(100):    #循环采样100个点
