@@ -22,10 +22,11 @@ y_test_ohe = tf.one_hot(y_test,depth=10).numpy()
 print(x_train.shape,y_train.shape, x_test.shape, y_test.shape)
 
 #3x3 convolution
-def conv3x3(channels, stride=1, kernel=(3, 3)):
-    return keras.layers.Conv2D(channels, kernel, strides=stride, padding='same',
-                               use_bias=False,
-                            kernel_initializer=tf.random_normal_initializer())
+def conv3x3(channels,strides=1,kernel=(3,3)):
+    return keras.layers.Conv2D(channels,kernel,strides=strides,padding='same',
+                               use_bias = False,
+                               kernel_initializer = tf.random_normal_initializer())
+
 
 
 class ResnetBlock(keras.Model):

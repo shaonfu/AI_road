@@ -20,9 +20,70 @@ class VGG16(models.Model):
             layers.BatchNormalization(),
             layers.Dropout(0.3),
 
-            
+            layers.Conv2D(64,(3,3),padding='same',
+            kernel_regularizer=regularizers.l2(weight_decay)),
+            layers.Activation('relu'),
+            layers.BatchNormalization(),
 
+            layers.MaxPooling2D(pool_size=(2,2)),
+
+            layers.Conv2D(128,(3,3),padding='same',
+            kernel_regularizer = regularizers.l2(weight_decay)),
+            layers.Activation('relu'),
+            layers.BatchNormalization(),
+            layers.Dropout(0.4),
+
+            layers.Conv2D(128,(3,3),padding='same',
+            kernel_regularizer = regularizers.l2(weight_decay)),
+            layers.Activation('relu'),
+            layers.BatchNormalization(),
+
+            layers.MaxPooling2D(pool_size=(2,2)),
+
+            layers.Conv2D(256,(3,3),padding='same',
+            kernel_regularizer = regularizers.l2(weight_decay)),
+            layers.Activation('relu'),
+            layers.BatchNormalization(),
+            layers.Dropout(0.4),
+
+            layers.Conv2D(256,(3,3),padding='same',
+            kernel_regularizer = regularizers.l2(weight_decay)),
+            layers.Activation('relu'),
+            layers.BatchNormalization(),
+            layers.Dropout(0.4),
+
+            layers.Conv2D(256,(3,3),padding='same',
+            kernel_regularizer = regularizers.l2(weight_decay)),
+            layers.Activation('relu'),
+            layers.BatchNormalization(),
+
+            model.add(layers.MaxPooling2D(pool_size=(2,2))),
+
+            layers.Conv2D(512,(3,3),padding='same',kernel_regularizer=regularizers.l2(weight_decay)),
+            layers.Activation('relu'),
+            layers.BatchNormalization(),
+            layers.Dropout(0.4),
+
+            layers.Conv2D(512,(3,3),padding='same',kernel_regularizer=regularizers.l2(weight_decay)),
+            layers.Activation('relu'),
+            layers.BatchNormalization(),
+            layers.Dropout(0.4),
+
+            layers.Conv2D(512,(3,3),padding='same',kernel_regularizer=regularizers.l2(weight_decay)),
+            layers.Activation('relu'),
+            layers.BatchNormalization(),
             
+            layers.MaxPooling2D(pool_size=(2,2)),
+            layers.Dropout(0.5),
+
+            layers.Flatten(), 
+            layers.Dense(512,kernel_regularizer = regularizers.l2(weight_decay)),
+            layers.Activation('relu'),
+            layers.BatchNormalization(),
+
+            layers.Dropout(0.5),
+            layers.Dense(self.num_classes)
+
         ])
 
         self.model = model
