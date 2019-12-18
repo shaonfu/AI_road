@@ -23,7 +23,9 @@ print(x_train.shape,y_train.shape, x_test.shape, y_test.shape)
 
 #3x3 convolution
 def conv3x3(channels,strides=1,kernel=(3,3)):
-    return keras.layers.Conv2D(filters)
+    return keras.layers.Conv2D(channels,kernel,strides=strides,padding='same',
+                               use_bias = False,
+                               kernel_initializer = tf.random_normal_initializer())
 
 
 
